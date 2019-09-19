@@ -28,14 +28,12 @@ class _LoginFormState extends State<LoginForm> {
 			bloc: _loginBloc,
 			builder: (BuildContext context, LoginState state,) {
 				if (state is LoginFailure) {
-					_onWidgetDidBuild(() {
-						Scaffold.of(context).showSnackBar(
-							SnackBar(
-								content: Text('${state.error}'),
-								backgroundColor: Colors.red,
-							),
-						);
-					});
+					Scaffold.of(context).showSnackBar(
+						SnackBar(
+							content: Text('${state.error}'),
+							backgroundColor: Colors.red,
+						),
+					);
 				}
 				return Container(
 						padding: EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
@@ -102,17 +100,11 @@ class _LoginFormState extends State<LoginForm> {
 								),
 								SizedBox(height: 20.0),
 								Container(
-									child: state is LoginLoading ? SpinKitChasingDots(color: Colors.white, size: 50.0,) : null,
+									child: state is LoginLoading ? SpinKitChasingDots(color: Colors.yellow, size: 50.0,) : null,
 								)
 							],
 						)
 				);
-		});
-	}
-
-	void _onWidgetDidBuild(Function callback) {
-		WidgetsBinding.instance.addPostFrameCallback((_) {
-			callback();
 		});
 	}
 

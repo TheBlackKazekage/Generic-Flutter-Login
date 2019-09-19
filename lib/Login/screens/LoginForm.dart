@@ -93,14 +93,11 @@ class _LoginFormState extends State<LoginForm> {
 										shadowColor: Colors.yellowAccent,
 										color: Colors.yellow,
 										elevation: 7.0,
-										child: GestureDetector(
-											onTap: () {
-												state is LoginLoading ? _loginBloc.dispatch(LoginBtnPressed(phoneNo: _phoneController.text, password: _passwordController.text,)) : null;
-											},
-											child: Center(
-												child: Text('LOGIN', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: 'Montserrat'),),
-											),
-										),
+										child: RaisedButton(
+											onPressed:
+												state is! LoginLoading ? _onLoginButtonPressed : null,
+											child: Text('LOGIN', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: 'Montserrat'),),
+									),
 									),
 								),
 								SizedBox(height: 20.0),
@@ -117,5 +114,11 @@ class _LoginFormState extends State<LoginForm> {
 		WidgetsBinding.instance.addPostFrameCallback((_) {
 			callback();
 		});
+	}
+
+	_onLoginButtonPressed() {
+		_loginBloc.dispatch(
+				LoginBtnPressed(phoneNo: _phoneController.text, password: _passwordController.text,)
+		);
 	}
 }

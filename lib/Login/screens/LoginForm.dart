@@ -112,5 +112,11 @@ class _LoginFormState extends State<LoginForm> {
 		_loginBloc.dispatch(
 				LoginBtnPressed(phoneNo: _phoneController.text, password: _passwordController.text,)
 		);
+
+		final snackbar = SnackBar(
+			content: Text('phoneNo: ' + _phoneController.text + ', password: ' + _passwordController.text),
+		);
+
+		Scaffold.of(context).showSnackBar(snackbar);
 	}
 }

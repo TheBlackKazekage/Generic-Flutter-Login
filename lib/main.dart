@@ -13,6 +13,7 @@ import 'Login/screens/SplashScreen.dart';
 class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onTransition(Transition transition) {
+    super.onTransition(transition);
     print(transition.toString());
   }
 
@@ -25,7 +26,16 @@ class SimpleBlocDelegate extends BlocDelegate {
 
 void main() {
   BlocSupervisor().delegate = SimpleBlocDelegate();
-  runApp(App(authRepo: AuthRepository()));
+//  runApp(App(authRepo: AuthRepository()));
+
+  final authRepo = AuthRepository();
+  runApp(
+      BlocProvider<AuthBloc>(
+        bloc: AuthBloc(authRepo: authRepo)
+        ..dispatch(AppStarted()),
+        child: App(authRepo: authRepo,),
+      )
+  );
 }
 
 class App extends StatefulWidget {
@@ -61,11 +71,7 @@ class _AppState extends State<App> {
       child: MaterialApp(
         home: BlocBuilder<AuthEvent, AuthState>(
           bloc: authenticationBloc,
-          // ignore: missing_return
           builder: (BuildContext context, AuthState state) {
-            if (state is AuthUninitialized) {
-              return SplashScreen();
-            }
             if (state is AuthAuthenticated) {
               return HomePage();
             }
@@ -75,9 +81,36 @@ class _AppState extends State<App> {
             if (state is AuthLoading) {
               return SpinKitChasingDots(color: Colors.red, size: 50.0);
             }
+            return SplashScreen();
           },
         ),
       ),
     );
   }
 }
+
+//class App extends StatelessWidget {
+//  final AuthRepository authRepo;
+//
+//  App({Key key, @required this.authRepo}) : super(key: key);
+//
+//  @override
+//  Widget build(BuildContext context) {
+//    return MaterialApp(
+//      home: BlocBuilder<AuthBloc, AuthState>(
+//        builder: (context, state) {
+//          if(state is AuthAuthenticated) {
+//            return HomePage();
+//          }
+//          if(state is AuthUnauthenticated) {
+//            return LoginPage(authRepo: authRepo,);
+//          }
+//          if (state is AuthLoading) {
+//            return SpinKitChasingDots(color: Colors.blue, size: 50.0);
+//          }
+//          return SplashScreen();
+//        },
+//      )
+//    );
+//  }
+//}
